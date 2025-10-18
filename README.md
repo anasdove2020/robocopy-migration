@@ -26,11 +26,12 @@ The input CSV file must contain a column named **`Path`**, for example:
 ```csv
 Path
 D:\Source\Folder 1\Document1.txt
+D:\Source\Folder 1\Document2.txt
+D:\Source\Folder 1\Document3.txt
 D:\Source\Folder 2\Folder 2.1\Document2.txt
-D:\Source\Folder 3
 ```
 
-Each row represents a full file or folder path to move.
+Each row represents a full file path to move.
 
 ---
 
