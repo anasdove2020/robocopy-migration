@@ -70,4 +70,3 @@ D:\Source\Folder 2\Document 2.5.txt
 ## 📁 Author
 
 **Choirul Anas**  
-Generated automatically with ❤️ by ChatGPT.
