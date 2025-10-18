@@ -1,0 +1,242 @@
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows                              
+-------------------------------------------------------------------------------
+
+  Started : Saturday, October 18, 2025 2:44:57 PM
+2025/10/18 14:44:57 ERROR 3 (0x00000003) Getting File System Type of Source I:\finance\
+The system cannot find the path specified.
+
+2025/10/18 14:44:57 ERROR 3 (0x00000003) Getting File System Type of Destination I:\Archiving\finance\
+The system cannot find the path specified.
+
+   Source = I:\finance\
+     Dest = I:\Archiving\finance\
+
+    Files : *.*
+	    
+Exc Files : .\ExcludeTemp.txt
+	    
+ Exc Dirs : .\ExcludeTemp.txt
+	    
+  Options : *.* /TEE /S /E /COPYALL /MOV /R:1 /W:1 
+
+------------------------------------------------------------------------------
+
+NOTE : Security may not be copied - Source might not support persistent ACLs.
+
+NOTE : Security may not be copied - Destination might not support persistent ACLs.
+
+ERROR : You do not have the Manage Auditing user right.
+*****  You need this to copy auditing information (/COPY:U or /COPYALL).
+
+       Simple Usage :: ROBOCOPY source destination /MIR
+
+             source :: Source Directory (drive:\path or \\server\share\path).
+        destination :: Destination Dir  (drive:\path or \\server\share\path).
+               /MIR :: Mirror a complete directory tree.
+
+    For more usage information run ROBOCOPY /?
+
+                                                          
+****  /MIR can DELETE files as well as copy them !
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows                              
+-------------------------------------------------------------------------------
+
+  Started : Saturday, October 18, 2025 4:21:50 PM
+   Source : D:\Sandip\RobocopyMigration\Source\
+     Dest : D:\Sandip\RobocopyMigration\Target\
+
+    Files : *.*
+	    
+Exc Files : .\ExcludeTemp.txt
+	    
+ Exc Dirs : .\ExcludeTemp.txt
+	    
+  Options : *.* /TEE /S /E /COPYALL /MOV /R:1 /W:1 
+
+------------------------------------------------------------------------------
+
+ERROR : You do not have the Manage Auditing user right.
+*****  You need this to copy auditing information (/COPY:U or /COPYALL).
+
+       Simple Usage :: ROBOCOPY source destination /MIR
+
+             source :: Source Directory (drive:\path or \\server\share\path).
+        destination :: Destination Dir  (drive:\path or \\server\share\path).
+               /MIR :: Mirror a complete directory tree.
+
+    For more usage information run ROBOCOPY /?
+
+                                                          
+****  /MIR can DELETE files as well as copy them !
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows                              
+-------------------------------------------------------------------------------
+
+  Started : Saturday, October 18, 2025 4:29:53 PM
+   Source : D:\Sandip\RobocopyMigration\Source\
+     Dest : D:\Sandip\RobocopyMigration\Target\
+
+    Files : *.*
+	    
+Exc Files : .\ExcludeTemp.txt
+	    
+ Exc Dirs : .\ExcludeTemp.txt
+	    
+  Options : *.* /TEE /S /E /COPYALL /MOV /R:1 /W:1 
+
+------------------------------------------------------------------------------
+
+ERROR : You do not have the Manage Auditing user right.
+*****  You need this to copy auditing information (/COPY:U or /COPYALL).
+
+       Simple Usage :: ROBOCOPY source destination /MIR
+
+             source :: Source Directory (drive:\path or \\server\share\path).
+        destination :: Destination Dir  (drive:\path or \\server\share\path).
+               /MIR :: Mirror a complete directory tree.
+
+    For more usage information run ROBOCOPY /?
+
+                                                          
+****  /MIR can DELETE files as well as copy them !
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows                              
+-------------------------------------------------------------------------------
+
+  Started : Saturday, October 18, 2025 4:31:56 PM
+   Source : D:\Sandip\RobocopyMigration\Source\
+     Dest : D:\Sandip\RobocopyMigration\Target\
+
+    Files : *.*
+	    
+Exc Files : .\ExcludeTemp.txt
+	    
+ Exc Dirs : .\ExcludeTemp.txt
+	    
+  Options : *.* /TEE /S /E /DCOPY:DA /COPY:DATSO /MOV /R:1 /W:1 
+
+------------------------------------------------------------------------------
+
+	                   5	D:\Sandip\RobocopyMigration\Source\
+	    New File  		       0	Document 1.txt
+2025/10/18 16:31:56 ERROR 5 (0x00000005) Copying NTFS Security to Destination File D:\Sandip\RobocopyMigration\Source\Document 1.txt
+Access is denied.
+
+	    New File  		       0	Document 2.txt
+2025/10/18 16:31:56 ERROR 5 (0x00000005) Copying NTFS Security to Destination File D:\Sandip\RobocopyMigration\Source\Document 2.txt
+Access is denied.
+
+	    New File  		       0	Document 3.txt
+2025/10/18 16:31:56 ERROR 5 (0x00000005) Copying NTFS Security to Destination File D:\Sandip\RobocopyMigration\Source\Document 3.txt
+Access is denied.
+
+	    New File  		       0	Document 4.txt
+2025/10/18 16:31:56 ERROR 5 (0x00000005) Copying NTFS Security to Destination File D:\Sandip\RobocopyMigration\Source\Document 4.txt
+Access is denied.
+
+	    New File  		       0	Document 5.txt
+2025/10/18 16:31:56 ERROR 5 (0x00000005) Copying NTFS Security to Destination File D:\Sandip\RobocopyMigration\Source\Document 5.txt
+Access is denied.
+
+	  New Dir          5	D:\Sandip\RobocopyMigration\Source\Folder 1\
+2025/10/18 16:31:56 ERROR 5 (0x00000005) Copying NTFS Security to Destination Directory D:\Sandip\RobocopyMigration\Target\Folder 1\
+Access is denied.
+
+	  New Dir          5	D:\Sandip\RobocopyMigration\Source\Folder 2\
+2025/10/18 16:31:56 ERROR 5 (0x00000005) Copying NTFS Security to Destination Directory D:\Sandip\RobocopyMigration\Target\Folder 2\
+Access is denied.
+
+	  New Dir          0	D:\Sandip\RobocopyMigration\Source\Folder 3\
+2025/10/18 16:31:56 ERROR 5 (0x00000005) Copying NTFS Security to Destination Directory D:\Sandip\RobocopyMigration\Target\Folder 3\
+Access is denied.
+
+	  New Dir          0	D:\Sandip\RobocopyMigration\Source\Folder 4\
+2025/10/18 16:31:56 ERROR 5 (0x00000005) Copying NTFS Security to Destination Directory D:\Sandip\RobocopyMigration\Target\Folder 4\
+Access is denied.
+
+
+------------------------------------------------------------------------------
+
+               Total    Copied   Skipped  Mismatch    FAILED    Extras
+    Dirs :         5         4         1         0         0         0
+   Files :         5         0         0         0         5         0
+   Bytes :         0         0         0         0         0         0
+   Times :   0:00:00   0:00:00                       0:00:00   0:00:00
+   Ended : Saturday, October 18, 2025 4:31:56 PM
+
+
+-------------------------------------------------------------------------------
+   ROBOCOPY     ::     Robust File Copy for Windows                              
+-------------------------------------------------------------------------------
+
+  Started : Saturday, October 18, 2025 4:38:14 PM
+   Source : D:\Sandip\RobocopyMigration\Source\
+     Dest : D:\Sandip\RobocopyMigration\Target\
+
+    Files : *.*
+	    
+Exc Files : .\ExcludeTemp.txt
+	    
+ Exc Dirs : .\ExcludeTemp.txt
+	    
+  Options : *.* /TEE /S /E /DCOPY:DA /COPY:DATSO /MOV /R:1 /W:1 
+
+------------------------------------------------------------------------------
+
+	                   5	D:\Sandip\RobocopyMigration\Source\
+	                   5	D:\Sandip\RobocopyMigration\Source\Folder 1\
+	    New File  		       0	Document 1.1.txt
+	    New File  		       0	Document 1.2.txt
+	    New File  		       0	Document 1.3.txt
+	    New File  		       0	Document 1.4.txt
+	    New File  		       0	Document 1.5.txt
+	  New Dir          5	D:\Sandip\RobocopyMigration\Source\Folder 1\Folder 1.1\
+	    New File  		       0	Document 1.1.1.txt
+	    New File  		       0	Document 1.1.2.txt
+	    New File  		       0	Document 1.1.3.txt
+	    New File  		       0	Document 1.1.4.txt
+	    New File  		       0	Document 1.1.5.txt
+	  New Dir          5	D:\Sandip\RobocopyMigration\Source\Folder 1\Folder 1.2\
+	    New File  		       0	Document 1.2.1.txt
+	    New File  		       0	Document 1.2.2.txt
+	    New File  		       0	Document 1.2.3.txt
+	    New File  		       0	Document 1.2.4.txt
+	    New File  		       0	Document 1.2.5.txt
+	  New Dir          0	D:\Sandip\RobocopyMigration\Source\Folder 1\Folder 1.3\
+	                   5	D:\Sandip\RobocopyMigration\Source\Folder 2\
+	    New File  		       0	Document 2.1.txt
+	    New File  		       0	Document 2.2.txt
+	    New File  		       0	Document 2.3.txt
+	    New File  		       0	Document 2.4.txt
+	    New File  		       0	Document 2.5.txt
+	  New Dir          5	D:\Sandip\RobocopyMigration\Source\Folder 2\Folder 2.1\
+	    New File  		       0	Document 2.1.1.txt
+	    New File  		       0	Document 2.1.2.txt
+	    New File  		       0	Document 2.1.3.txt
+	    New File  		       0	Document 2.1.4.txt
+	    New File  		       0	Document 2.1.5.txt
+	  New Dir          5	D:\Sandip\RobocopyMigration\Source\Folder 2\Folder 2.2\
+	    New File  		       0	Document 1.2.1.txt
+	    New File  		       0	Document 1.2.2.txt
+	    New File  		       0	Document 1.2.3.txt
+	    New File  		       0	Document 1.2.4.txt
+	    New File  		       0	Document 1.2.5.txt
+	  New Dir          0	D:\Sandip\RobocopyMigration\Source\Folder 2\Folder 2.3\
+	                   0	D:\Sandip\RobocopyMigration\Source\Folder 3\
+	                   0	D:\Sandip\RobocopyMigration\Source\Folder 4\
+
+------------------------------------------------------------------------------
+
+               Total    Copied   Skipped  Mismatch    FAILED    Extras
+    Dirs :        11         6         5         0         0         0
+   Files :        35        30         5         0         0         0
+   Bytes :         0         0         0         0         0         0
+   Times :   0:00:00   0:00:00                       0:00:00   0:00:00
+   Ended : Saturday, October 18, 2025 4:38:14 PM
+
