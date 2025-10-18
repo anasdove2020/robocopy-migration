@@ -1,6 +1,6 @@
 # ============================================
-# Script Name : Move-FilesFromCsv.ps1
-# Purpose     : Move files or folders listed in a CSV file to a target directory
+# Script Name : move-files.ps1
+# Purpose     : Move files listed in a CSV file to a target directory
 #               while preserving their original folder structure
 # Author      : Choirul Anas
 # ============================================
@@ -10,7 +10,7 @@ param(
     [string]$TargetPath,                     # Destination folder
 
     [Parameter(Mandatory = $true)]
-    [string]$ExcludeCsvPath                  # CSV file containing paths to move (column: Path)
+    [string]$ListToMovePath                 # CSV file containing paths to move (column: Path)
 )
 
 # ============================================
@@ -18,7 +18,7 @@ param(
 # ============================================
 Write-Host ""
 Write-Host "============================================" -ForegroundColor Cyan
-Write-Host " MOVE FILES FROM CSV (KEEP FOLDER STRUCTURE)" -ForegroundColor Cyan
+Write-Host " MOVE FILES FROM CSV (FILES ONLY, KEEP STRUCTURE)" -ForegroundColor Cyan
 Write-Host "============================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -31,9 +31,9 @@ if (!(Test-Path $TargetPath)) {
     exit 1
 }
 
-Write-Host "Validating CSV file..."
-if (!(Test-Path $ExcludeCsvPath)) {
-    Write-Host "CSV file not found: $ExcludeCsvPath" -ForegroundColor Red
+Write-Host "Validating List To Move file..."
+if (!(Test-Path $ListToMovePath)) {
+    Write-Host "CSV file not found: $ListToMovePath" -ForegroundColor Red
     exit 1
 }
 
@@ -41,7 +41,7 @@ if (!(Test-Path $ExcludeCsvPath)) {
 # 2️. READ CSV AND PREPARE OUTPUT
 # ============================================
 Write-Host "Reading file list from CSV..."
-$items = Import-Csv -Path $ExcludeCsvPath
+$items = Import-Csv -Path $ListToMovePath
 
 if ($items.Count -eq 0) {
     Write-Host "No data found in CSV. Nothing to move." -ForegroundColor Yellow
@@ -53,7 +53,7 @@ $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 $results = @()
 
 # ============================================
-# 3️. PROCESS EACH ITEM
+# 3️. PROCESS EACH ITEM (FILES ONLY)
 # ============================================
 Write-Host ""
 Write-Host "=============== START MOVING ===============" -ForegroundColor Cyan
@@ -68,19 +68,33 @@ foreach ($item in $items) {
             Status      = "WARNING"
             Source      = $path
             Destination = ""
-            Message     = "File not found"
+            Message     = "File not found."
+        }
+        continue
+    }
+
+    # Check if path is a folder
+    $itemType = (Get-Item $path).PSIsContainer
+    if ($itemType -eq $true) {
+        Write-Host "[$timestamp] [ WARNING ] Folder detected, skipping [$path]." -ForegroundColor Yellow
+        $results += [PSCustomObject]@{
+            Timestamp   = $timestamp
+            Status      = "WARNING"
+            Source      = $path
+            Destination = ""
+            Message     = "Folder detected, only files are allowed."
         }
         continue
     }
 
     try {
-        # Get the drive root (e.g., D:\)
+        # Get drive root (e.g., D:\)
         $driveRoot = Split-Path $path -Qualifier
 
-        # Get relative path (everything after the drive root)
+        # Get relative path (everything after drive root)
         $relativePath = $path.Substring($driveRoot.Length).TrimStart('\')
 
-        # Construct destination preserving full folder structure
+        # Construct destination path preserving structure
         $destination = Join-Path $TargetPath $relativePath
 
         # Ensure parent folder exists
@@ -89,7 +103,7 @@ foreach ($item in $items) {
             New-Item -ItemType Directory -Path $parentDir -Force | Out-Null
         }
 
-        # Move the file/folder
+        # Move file
         Move-Item -Path $path -Destination $destination -Force
 
         Write-Host "[$timestamp] [  INFO   ] Success to move file from [$path] to [$destination]" -ForegroundColor Green
@@ -98,11 +112,12 @@ foreach ($item in $items) {
             Status      = "SUCCESS"
             Source      = $path
             Destination = $destination
-            Message     = "File moved"
+            Message     = "File moved successfully."
         }
     }
     catch {
-        Write-Host "[$timestamp] [ERROR] Failed to move file from [$path] to [$destination]. Error: $($_.Exception.Message)" -ForegroundColor Red
+        Write-Host "[$timestamp] [ERROR] Failed to move file: [$path] to [$destination]." -ForegroundColor Red
+        Write-Host "        Reason: $($_.Exception.Message)" -ForegroundColor Red
         $results += [PSCustomObject]@{
             Timestamp   = $timestamp
             Status      = "ERROR"
@@ -118,6 +133,6 @@ foreach ($item in $items) {
 # ============================================
 $results | Export-Csv -Path $outputCsv -NoTypeInformation -Append
 Write-Host ""
-Write-Host "Migration completed at $timestamp" -ForegroundColor Cyan
+Write-Host "Process completed at $timestamp" -ForegroundColor Cyan
 Write-Host "Result saved to: $outputCsv" -ForegroundColor Green
 Write-Host "============================================" -ForegroundColor Cyan

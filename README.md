@@ -1,18 +1,18 @@
-# Move-FilesFromCsv.ps1  
+# move-files.ps1  
 **Author:** Choirul Anas  
-**Purpose:** Move files or folders listed in a CSV file to a target directory while preserving their original folder structure.
+**Purpose:** Move files listed in a CSV file to a target directory while preserving their original folder structure.
 
 ---
 
 ## 📋 Overview
-`Move-FilesFromCsv.ps1` is a PowerShell script that reads file paths from a CSV file and moves each file or folder to a target directory.  
+`move-files.ps1` is a PowerShell script that reads file paths from a CSV file and moves each file to a target directory.  
 It automatically recreates the original folder structure inside the target directory.
 
 ---
 
 ## ⚙️ Features
 ✅ Reads file paths from a CSV file  
-✅ Moves files or folders while keeping their full folder structure  
+✅ Moves files while keeping their full folder structure  
 ✅ Creates missing directories automatically  
 ✅ Logs all results (success, warning, or error) to a CSV report  
 ✅ Displays detailed progress information in the console  
@@ -42,7 +42,7 @@ Make sure you open PowerShell **with sufficient permissions** (e.g., Administrat
 ### **2. Run the Script**
 
 ```powershell
-.\Move-FilesFromCsv.ps1 -TargetPath "D:\Target" -ExcludeCsvPath "D:\list-to-move.csv"
+.\move-files.ps1 -TargetPath "D:\Target" -ListToMovePath "D:\list-to-move.csv"
 ```
 
 ### **Parameters**
@@ -50,7 +50,7 @@ Make sure you open PowerShell **with sufficient permissions** (e.g., Administrat
 | Parameter | Required | Description |
 |------------|-----------|-------------|
 | `-TargetPath` | ✅ | Destination folder where files/folders will be moved. |
-| `-ExcludeCsvPath` | ✅ | Full path to the CSV file containing file paths to move. |
+| `-ListToMovePath` | ✅ | Full path to the CSV file containing file paths to move. |
 
 ---
 
@@ -59,7 +59,7 @@ Make sure you open PowerShell **with sufficient permissions** (e.g., Administrat
 ### **Input**
 ```
 TargetPath: D:\Target
-ExcludeCsvPath: D:\move-list.csv
+ListToMovePath: D:\move-list.csv
 ```
 
 ### **CSV Content**
