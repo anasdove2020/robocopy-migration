@@ -1,6 +1,5 @@
-# robocopy-migration
-Robocopy Migration
+# Move Files From CSV
 
 ```
-.\Migrate-Files.ps1 -SourcePath "D:\Sandip\RobocopyMigration\Source" -TargetPath "D:\Sandip\RobocopyMigration\Target" -ExcludeCsvPath ".\ExcludeList.csv"
+.\Move-FilesFromCsv.ps1 -TargetPath "D:\Archive" -ExcludeCsvPath ".\ExcludeList.csv"
 ```
