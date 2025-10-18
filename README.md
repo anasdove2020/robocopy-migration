@@ -19,7 +19,7 @@ The script:
 | Parameter | Description |
 |------------|-------------|
 | `-TargetPath` | Destination folder for moved files. |
-| `-ExcludeCsvPath` | Path to the CSV file containing file paths to move. |
+| `-ListToMovePath` | Path to the CSV file containing file paths to move. |
 
 ---
 
@@ -29,8 +29,11 @@ The CSV must contain **full paths** to files (no headers required).
 Example:
 
 ```csv
-D:\Source\Folder1\Doc1.txt
-D:\Source\Folder2\Folder2.2\Doc2.txt
+D:\Source\Folder 2\Document 2.1.txt
+D:\Source\Folder 2\Document 2.2.txt
+D:\Source\Folder 2\Document 2.3.txt
+D:\Source\Folder 2\Document 2.4.txt
+D:\Source\Folder 2\Document 2.5.txt
 ```
 
 ---
@@ -38,7 +41,7 @@ D:\Source\Folder2\Folder2.2\Doc2.txt
 ## 🚀 Example Usage
 
 ```powershell
-.\Move-Files.ps1 -TargetPath "D:\Target" -ExcludeCsvPath "D:\exclude.csv"
+.\Move-Files.ps1 -TargetPath "D:\Target" -ListToMovePath "D:\list-to-move.csv"
 ```
 
 ---
@@ -55,8 +58,11 @@ D:\Source\Folder2\Folder2.2\Doc2.txt
 
 ```
 =============== START MOVING ===============
-Moved: D:\Source\Folder 2\Folder 2.2\Document 2.2.1.txt -> D:\Target\Source\Folder 2\Folder 2.2\Document 2.2.1.txt
-=============== FINISHED ===============
+[2025-10-18 19:35:32] [SUCCESS] D:\Source\Folder 2\Document 2.1.txt -> D:\Archive\Source\Folder 2\Document 2.1.txt
+[2025-10-18 19:35:32] [SUCCESS] D:\Source\Folder 2\Document 2.2.txt -> D:\Archive\Source\Folder 2\Document 2.2.txt
+[2025-10-18 19:35:32] [SUCCESS] D:\Source\Folder 2\Document 2.3.txt -> D:\Archive\Source\Folder 2\Document 2.3.txt
+[2025-10-18 19:35:32] [SUCCESS] D:\Source\Folder 2\Document 2.4.txt -> D:\Archive\Source\Folder 2\Document 2.4.txt
+[2025-10-18 19:35:32] [SUCCESS] D:\Source\Folder 2\Document 2.5.txt -> D:\Archive\Source\Folder 2\Document 2.5.txt
 ```
 
 ---
