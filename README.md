@@ -50,7 +50,7 @@ Make sure you open PowerShell **with sufficient permissions** (e.g., Administrat
 
 | Parameter | Required | Description |
 |------------|-----------|-------------|
-| `-TargetPath` | ✅ | Destination folder where files/folders will be moved. |
+| `-TargetPath` | ✅ | Destination folder where files will be moved. |
 | `-ListToMovePath` | ✅ | Full path to the CSV file containing file paths to move. |
 
 ---
