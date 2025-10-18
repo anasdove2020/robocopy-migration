@@ -1,5 +1,5 @@
 # ============================================
-# Script Name : move-files.ps1
+# Script Name : Move-Files.ps1
 # Purpose     : Move files listed in a CSV file to a target directory
 #               while preserving their original folder structure.
 #               Uses Robocopy for performance and reliability.
