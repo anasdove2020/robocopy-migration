@@ -1,7 +1,8 @@
 # ============================================
 # Script Name : move-files.ps1
 # Purpose     : Move files listed in a CSV file to a target directory
-#               while preserving their original folder structure
+#               while preserving their original folder structure.
+#               Uses Robocopy for performance and reliability.
 # Author      : Choirul Anas
 # ============================================
 
@@ -10,7 +11,7 @@ param(
     [string]$TargetPath,                     # Destination folder
 
     [Parameter(Mandatory = $true)]
-    [string]$ListToMovePath                 # CSV file containing paths to move (column: Path)
+    [string]$ListToMovePath                  # CSV or TXT file containing file paths (one per line)
 )
 
 # ============================================
@@ -18,7 +19,7 @@ param(
 # ============================================
 Write-Host ""
 Write-Host "============================================" -ForegroundColor Cyan
-Write-Host " MOVE FILES FROM CSV (FILES ONLY, KEEP STRUCTURE)" -ForegroundColor Cyan
+Write-Host " MOVE FILES USING ROBOCOPY (FILES ONLY)" -ForegroundColor Cyan
 Write-Host "============================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -31,107 +32,127 @@ if (!(Test-Path $TargetPath)) {
     exit 1
 }
 
-Write-Host "Validating List To Move file..."
+Write-Host "Validating list file..."
 if (!(Test-Path $ListToMovePath)) {
-    Write-Host "CSV file not found: $ListToMovePath" -ForegroundColor Red
+    Write-Host "File list not found: $ListToMovePath" -ForegroundColor Red
     exit 1
 }
 
 # ============================================
-# 2️. READ CSV AND PREPARE OUTPUT
+# 2️. READ FILE LIST
 # ============================================
-Write-Host "Reading file list from CSV..."
-$items = Import-Csv -Path $ListToMovePath
+Write-Host "Reading file list..."
+$allLines = Get-Content -Path $ListToMovePath | Where-Object { $_.Trim() -ne "" }
 
-if ($items.Count -eq 0) {
-    Write-Host "No data found in CSV. Nothing to move." -ForegroundColor Yellow
+if ($allLines.Count -eq 0) {
+    Write-Host "No paths found in file list. Nothing to move." -ForegroundColor Yellow
     exit 0
 }
 
-$outputCsv = ".\MoveResult.csv"
-$timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-$results = @()
+if ($allLines[0] -match '^(Path|File|Source)') {
+    $lines = $allLines | Select-Object -Skip 1
+} else {
+    $lines = $allLines
+}
 
-# ============================================
-# 3️. PROCESS EACH ITEM (FILES ONLY)
-# ============================================
+Write-Host "Found $($lines.Count) file(s) to move."
 Write-Host ""
 Write-Host "=============== START MOVING ===============" -ForegroundColor Cyan
 
-foreach ($item in $items) {
-    $path = $item.Path
+# ============================================
+# 3️. PROCESS EACH FILE
+# ============================================
+$timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+$results = @()
 
-    if (!(Test-Path $path)) {
-        Write-Host "[$timestamp] [ WARNING ] File [$path] not found." -ForegroundColor Yellow
+foreach ($filePath in $lines) {
+    $filePath = $filePath.Trim('"').Trim()
+
+    if (!(Test-Path $filePath)) {
+        Write-Host "[$timestamp] [WARNING] File not found: $filePath" -ForegroundColor Yellow
         $results += [PSCustomObject]@{
             Timestamp   = $timestamp
             Status      = "WARNING"
-            Source      = $path
+            Source      = $filePath
             Destination = ""
             Message     = "File not found."
         }
         continue
     }
 
-    # Check if path is a folder
-    $itemType = (Get-Item $path).PSIsContainer
-    if ($itemType -eq $true) {
-        Write-Host "[$timestamp] [ WARNING ] Folder detected, skipping [$path]." -ForegroundColor Yellow
+    $item = Get-Item $filePath
+    if ($item.PSIsContainer -eq $true) {
+        Write-Host "[$timestamp] [SKIP] Folder detected, skipping: $filePath" -ForegroundColor DarkYellow
         $results += [PSCustomObject]@{
             Timestamp   = $timestamp
-            Status      = "WARNING"
-            Source      = $path
+            Status      = "SKIPPED"
+            Source      = $filePath
             Destination = ""
-            Message     = "Folder detected, only files are allowed."
+            Message     = "Folder detected. Only files are allowed."
         }
         continue
     }
 
     try {
-        # Get drive root (e.g., D:\)
-        $driveRoot = Split-Path $path -Qualifier
-
-        # Get relative path (everything after drive root)
-        $relativePath = $path.Substring($driveRoot.Length).TrimStart('\')
+        # Extract relative path after drive root
+        $driveRoot = Split-Path $filePath -Qualifier
+        $relativePath = $filePath.Substring($driveRoot.Length).TrimStart('\')
 
         # Construct destination path preserving structure
-        $destination = Join-Path $TargetPath $relativePath
+        $destinationPath = Join-Path $TargetPath $relativePath
+        $destinationDir = Split-Path $destinationPath -Parent
 
-        # Ensure parent folder exists
-        $parentDir = Split-Path $destination -Parent
-        if (!(Test-Path $parentDir)) {
-            New-Item -ItemType Directory -Path $parentDir -Force | Out-Null
+        # Ensure target directory exists
+        if (!(Test-Path $destinationDir)) {
+            New-Item -ItemType Directory -Path $destinationDir -Force | Out-Null
         }
 
-        # Move file
-        Move-Item -Path $path -Destination $destination -Force
+        # Robocopy command
+        $sourceDir = Split-Path $filePath -Parent
+        $fileName = Split-Path $filePath -Leaf
+        $robocopyCmd = "robocopy `"$sourceDir`" `"$destinationDir`" `"$fileName`" /MOV /R:1 /W:1 /MT:16 /NFL /NDL /NP /NJH /NJS"
 
-        Write-Host "[$timestamp] [  INFO   ] Success to move file from [$path] to [$destination]" -ForegroundColor Green
-        $results += [PSCustomObject]@{
-            Timestamp   = $timestamp
-            Status      = "SUCCESS"
-            Source      = $path
-            Destination = $destination
-            Message     = "File moved successfully."
+        cmd /c $robocopyCmd | Out-Null
+
+        if (Test-Path $destinationPath) {
+            Write-Host "[$timestamp] [SUCCESS] $filePath -> $destinationPath" -ForegroundColor Green
+            $results += [PSCustomObject]@{
+                Timestamp   = $timestamp
+                Status      = "SUCCESS"
+                Source      = $filePath
+                Destination = $destinationPath
+                Message     = "File moved successfully."
+            }
+        }
+        else {
+            Write-Host "[$timestamp] [ERROR] Failed to move: $filePath" -ForegroundColor Red
+            $results += [PSCustomObject]@{
+                Timestamp   = $timestamp
+                Status      = "ERROR"
+                Source      = $filePath
+                Destination = $destinationPath
+                Message     = "Robocopy failed or target not created."
+            }
         }
     }
     catch {
-        Write-Host "[$timestamp] [ERROR] Failed to move file: [$path] to [$destination]." -ForegroundColor Red
-        Write-Host "        Reason: $($_.Exception.Message)" -ForegroundColor Red
+        Write-Host "[$timestamp] [ERROR] Exception on file: $filePath" -ForegroundColor Red
+        Write-Host "Reason: $($_.Exception.Message)" -ForegroundColor Red
         $results += [PSCustomObject]@{
             Timestamp   = $timestamp
             Status      = "ERROR"
-            Source      = $path
-            Destination = $destination
-            Message     = $($_.Exception.Message)
+            Source      = $filePath
+            Destination = ""
+            Message     = $_.Exception.Message
         }
     }
 }
 
 # ============================================
-# 4️. WRITE RESULT
+# 4️. SAVE RESULT TO CSV
 # ============================================
-$results | Export-Csv -Path $outputCsv -NoTypeInformation -Append
+$outputCsv = ".\MoveResult.csv"
+$results | Export-Csv -Path $outputCsv -NoTypeInformation -Encoding UTF8
 Write-Host ""
 Write-Host "Process completed at $timestamp" -ForegroundColor Cyan
 Write-Host "Result saved to: $outputCsv" -ForegroundColor Green
