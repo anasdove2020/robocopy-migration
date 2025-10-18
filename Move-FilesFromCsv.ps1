@@ -23,7 +23,7 @@ Write-Host "============================================" -ForegroundColor Cyan
 Write-Host ""
 
 # ============================================
-# 1️⃣ VALIDATION
+# 1️. VALIDATION
 # ============================================
 Write-Host "Validating target path..."
 if (!(Test-Path $TargetPath)) {
@@ -38,7 +38,7 @@ if (!(Test-Path $ExcludeCsvPath)) {
 }
 
 # ============================================
-# 2️⃣ READ CSV AND PREPARE OUTPUT
+# 2️. READ CSV AND PREPARE OUTPUT
 # ============================================
 Write-Host "Reading file list from CSV..."
 $items = Import-Csv -Path $ExcludeCsvPath
@@ -53,7 +53,7 @@ $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 $results = @()
 
 # ============================================
-# 3️⃣ PROCESS EACH ITEM
+# 3️. PROCESS EACH ITEM
 # ============================================
 Write-Host ""
 Write-Host "=============== START MOVING ===============" -ForegroundColor Cyan
@@ -62,11 +62,13 @@ foreach ($item in $items) {
     $path = $item.Path
 
     if (!(Test-Path $path)) {
-        Write-Host "Not found: $path" -ForegroundColor Yellow
+        Write-Host "[$timestamp] [ WARNING ] File [$path] not found." -ForegroundColor Yellow
         $results += [PSCustomObject]@{
-            Timestamp = $timestamp
-            Path      = $path
-            Status    = "Not Found"
+            Timestamp   = $timestamp
+            Status      = "WARNING"
+            Source      = $path
+            Destination = ""
+            Message     = "File not found"
         }
         continue
     }
@@ -90,25 +92,29 @@ foreach ($item in $items) {
         # Move the file/folder
         Move-Item -Path $path -Destination $destination -Force
 
-        Write-Host "Moved: $path -> $destination" -ForegroundColor Green
+        Write-Host "[$timestamp] [  INFO   ] Success to move file from [$path] to [$destination]" -ForegroundColor Green
         $results += [PSCustomObject]@{
-            Timestamp = $timestamp
-            Path      = $path
-            Status    = "Moved"
+            Timestamp   = $timestamp
+            Status      = "SUCCESS"
+            Source      = $path
+            Destination = $destination
+            Message     = "File moved"
         }
     }
     catch {
-        Write-Host "Error moving $path : $($_.Exception.Message)" -ForegroundColor Red
+        Write-Host "[$timestamp] [ERROR] Failed to move file from [$path] to [$destination]. Error: $($_.Exception.Message)" -ForegroundColor Red
         $results += [PSCustomObject]@{
-            Timestamp = $timestamp
-            Path      = $path
-            Status    = "Error: $($_.Exception.Message)"
+            Timestamp   = $timestamp
+            Status      = "ERROR"
+            Source      = $path
+            Destination = $destination
+            Message     = $($_.Exception.Message)
         }
     }
 }
 
 # ============================================
-# 4️⃣ WRITE RESULT
+# 4️. WRITE RESULT
 # ============================================
 $results | Export-Csv -Path $outputCsv -NoTypeInformation -Append
 Write-Host ""

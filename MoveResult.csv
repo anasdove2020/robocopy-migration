@@ -1,3 +1,4 @@
-"Timestamp","Path","Status"
-"2025-10-18 18:01:08","D:\Source\Folder 2\Folder 2.2\Document 2.2.1.txt","Moved"
-"2025-10-18 18:05:22","D:\Source\Folder 2\Folder 2.2\Document 2.2.1.txt","Moved"
+"Timestamp","Status","Source","Destination","Message"
+"2025-10-18 18:39:49","SUCCESS","D:\Source\Folder 2\Document 2.1.txt","D:\Archive\Source\Folder 2\Document 2.1.txt","File moved"
+"2025-10-18 18:39:49","SUCCESS","D:\Source\Folder 2\Document 2.3.txt","D:\Archive\Source\Folder 2\Document 2.3.txt","File moved"
+"2025-10-18 18:39:49","SUCCESS","D:\Source\Folder 2\Document 2.5.txt","D:\Archive\Source\Folder 2\Document 2.5.txt","File moved"
