@@ -8,10 +8,13 @@
 
 param(
     [Parameter(Mandatory = $true)]
-    [string]$TargetPath,                     # Destination folder
+    [string]$TargetPath,                    # Destination folder
 
     [Parameter(Mandatory = $true)]
-    [string]$ListToMovePath                  # CSV or TXT file containing file paths (one per line)
+    [string]$ListToMovePath,                # CSV or TXT file containing file paths (one per line)
+
+    [Parameter(Mandatory = $true)]
+    [int]$StartFromLine = 1                 # Line number to start reading from (default: 1, meaning start from the first line)
 )
 
 # ============================================
@@ -50,7 +53,12 @@ if ($allLines.Count -eq 0) {
 }
 
 if ($allLines[0] -match '^(Path|File|Source)') {
-    $lines = $allLines | Select-Object -Skip 1
+    $allLines = $allLines | Select-Object -Skip 1
+}
+
+if ($StartFromLine -gt 1) {
+    Write-Host "Skipping first $($StartFromLine - 1) line(s)..." -ForegroundColor DarkYellow
+    $lines = $allLines | Select-Object -Skip ($StartFromLine - 1)
 } else {
     $lines = $allLines
 }
@@ -114,6 +122,8 @@ foreach ($filePath in $lines) {
 
         cmd /c $robocopyCmd | Out-Null
 
+        Write-Host "Exit Code = $LASTEXITCODE"
+
         if (Test-Path $destinationPath) {
             Write-Host "[$timestamp] [SUCCESS] $filePath -> $destinationPath" -ForegroundColor Green
             $results += [PSCustomObject]@{
@@ -151,8 +161,11 @@ foreach ($filePath in $lines) {
 # ============================================
 # 4️. SAVE RESULT TO CSV
 # ============================================
-$outputCsv = ".\MoveResult.csv"
+$timestampForFile = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
+$outputCsv = ".\MoveResult-$timestampForFile.csv"
+
 $results | Export-Csv -Path $outputCsv -NoTypeInformation -Encoding UTF8
+
 Write-Host ""
 Write-Host "Process completed at $timestamp" -ForegroundColor Cyan
 Write-Host "Result saved to: $outputCsv" -ForegroundColor Green
