@@ -77,10 +77,10 @@ foreach ($filePath in $lines) {
     $filePath = $filePath.Trim('"').Trim()
 
     if (!(Test-Path $filePath)) {
-        Write-Host "[$timestamp] [WARNING] File not found: $filePath" -ForegroundColor Yellow
+        Write-Host "[$timestamp] [ERROR] File not found: $filePath" -ForegroundColor Red
         $results += [PSCustomObject]@{
             Timestamp   = $timestamp
-            Status      = "WARNING"
+            Status      = "ERROR"
             Source      = $filePath
             Destination = ""
             Message     = "File not found."
@@ -118,7 +118,7 @@ foreach ($filePath in $lines) {
         # Robocopy command
         $sourceDir = Split-Path $filePath -Parent
         $fileName = Split-Path $filePath -Leaf
-        $robocopyCmd = "robocopy `"$sourceDir`" `"$destinationDir`" `"$fileName`" /MOV /R:1 /W:1 /MT:16 /NFL /NDL /NP /NJH /NJS"
+        $robocopyCmd = "robocopy `"$sourceDir`" `"$destinationDir`" `"$fileName`" /MOV /COPYALL /R:1 /W:1 /MT:16 /NFL /NDL /NP /NJH /NJS"
 
         cmd /c $robocopyCmd | Out-Null
 
@@ -127,6 +127,7 @@ foreach ($filePath in $lines) {
         if (Test-Path $destinationPath) {
             Write-Host "[$timestamp] [SUCCESS] $filePath -> $destinationPath" -ForegroundColor Green
             $results += [PSCustomObject]@{
+                LineNumber  = ""
                 Timestamp   = $timestamp
                 Status      = "SUCCESS"
                 Source      = $filePath
@@ -137,6 +138,7 @@ foreach ($filePath in $lines) {
         else {
             Write-Host "[$timestamp] [ERROR] Failed to move: $filePath" -ForegroundColor Red
             $results += [PSCustomObject]@{
+                LineNumber  = ""
                 Timestamp   = $timestamp
                 Status      = "ERROR"
                 Source      = $filePath
