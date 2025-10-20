@@ -101,7 +101,7 @@ foreach ($filePath in $lines) {
         # Robocopy command
         $sourceDir = Split-Path $filePath -Parent
         $fileName = Split-Path $filePath -Leaf
-        $robocopyCmd = "robocopy `"$sourceDir`" `"$destinationDir`" `"$fileName`" /MOV /COPYALL /R:1 /W:1 /MT:16 /NFL /NDL /NP /NJH /NJS"
+        $robocopyCmd = "robocopy `"$sourceDir`" `"$destinationDir`" `"$fileName`" /MOV /COPY:DATS /R:1 /W:1 /MT:16 /NFL /NDL /NP /NJH /NJS"
 
         cmd /c $robocopyCmd | Out-Null
 
