@@ -20,6 +20,7 @@ The script:
 |------------|-------------|
 | `-TargetPath` | Destination folder for moved files. |
 | `-ListToMovePath` | Path to the CSV file containing file paths to move. |
+| `-StartFromLine` | Line number to start reading from (default: 1, meaning start from the first line) |
 
 ---
 
@@ -41,7 +42,7 @@ D:\Source\Folder 2\Document 2.5.txt
 ## 🚀 Example Usage
 
 ```powershell
-.\Move-Files.ps1 -TargetPath "D:\Target" -ListToMovePath "D:\list-to-move.csv"
+.\Move-Files.ps1 -TargetPath "D:\Target" -ListToMovePath "D:\list-to-move.csv" -StartFromLine 2
 ```
 
 ---
