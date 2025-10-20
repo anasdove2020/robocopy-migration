@@ -69,13 +69,14 @@ D:\Source\Folder 2\Document 2.5.txt
 
 ## 🧩 Robocopy Exit Code Reference
 
-Exit Code	Meaning	Description
-0	No files copied	No changes detected. All files already exist at destination with same timestamp/size.
-1	Files copied successfully	All files copied successfully.
-2	Extra files deleted	Extra files were deleted (if /PURGE or /MIR used).
-3	Files copied + extras deleted	Combination of above.
-5–7	Copied + some mismatched/skipped	Minor differences — not necessarily errors.
-8+	Serious error	I/O errors, access denied, path not found, etc.
+| Exit Code | Description |
+|------------|-------------|
+|0|	No files copied	No changes detected. All files already exist at destination with same timestamp/size.|
+|1|	Files copied successfully	All files copied successfully.|
+|2|	Extra files deleted	Extra files were deleted (if /PURGE or /MIR used).|
+|3|	Files copied + extras deleted	Combination of above.|
+|5–7|	Copied + some mismatched/skipped	Minor differences — not necessarily errors.|
+|8+|	Serious error	I/O errors, access denied, path not found, etc.|
 
 ## 📁 Author
 
